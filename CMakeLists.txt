@@ -13,5 +13,4 @@ FetchContent_Declare(STM32CubeG4
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(HAL)
 
-add_executable(app src/main.cpp)
-target_link_libraries(app PRIVATE stm32g431kb stm32g4::timer)
+add_subdirectory(src/app EXCLUDE_FROM_ALL)
