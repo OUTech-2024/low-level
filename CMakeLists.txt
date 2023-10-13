@@ -9,12 +9,11 @@ FetchContent_Declare(STM32CubeG4
                    GIT_TAG v1.5.1
                    CONFIGURE_COMMAND ""
                    BUILD_COMMAND "")
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+include(CMSIS)
+
 FetchContent_MakeAvailable(STM32CubeG4)
-
-add_library(CMSIS INTERFACE)
-target_include_directories(CMSIS INTERFACE ${stm32cubeg4_SOURCE_DIR}/Drivers/CMSIS/Include
-    ${stm32cubeg4_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32G4xx/Include/)
-
 
 set(STM32CubeG4_DRIVER_SOURCE_FILES stm32g4xx_hal.c)
 set(STM32CubeG4_DRIVER_SOURCE_DIR ${stm32cubeg4_SOURCE_DIR}/Drivers/STM32G4xx_HAL_Driver/Src)
