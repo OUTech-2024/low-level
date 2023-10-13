@@ -14,6 +14,4 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(HAL)
 
 add_executable(app src/main.cpp)
-add_compile_definitions(STM32G431xx)
-target_link_libraries(app PRIVATE stm32g4::timer)
-set_target_properties(app PROPERTIES LINK_DEPENDS ${STM32G431KB_LINKER_SCRIPT})
+target_link_libraries(app PRIVATE stm32g431kb stm32g4::timer)
