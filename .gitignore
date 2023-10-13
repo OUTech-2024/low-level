@@ -1,0 +1,7 @@
+/*
+!.gitignore
+!CMakeLists.txt
+!Dockerfile
+!Toolchain.cmake
+!doc/
+!src/
