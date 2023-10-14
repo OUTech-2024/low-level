@@ -3,6 +3,7 @@
 !CMakeLists.txt
 !Dockerfile
 !Toolchain.cmake
+!.github/
 !cmake/
 !doc/
 !src/
