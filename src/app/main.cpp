@@ -2,7 +2,7 @@
 #include <stm32g4xx_hal_tim.h>
 
 int main() {
-    HAL_TIM_Encoder_Init();
+  HAL_TIM_Encoder_Init();
 
-    return 0;
+  return 0;
 }
