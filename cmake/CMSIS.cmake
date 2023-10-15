@@ -7,3 +7,4 @@ set(CMSIS_STM32G4_INCLUDE_DIR
 add_library(CMSIS INTERFACE)
 target_include_directories(CMSIS INTERFACE ${CMSIS_INCLUDE_DIR}
                                            ${CMSIS_STM32G4_INCLUDE_DIR})
+set_target_properties(CMSIS PROPERTIES EXPORT_COMPILE_COMMANDS OFF)

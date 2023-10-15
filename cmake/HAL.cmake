@@ -25,6 +25,8 @@ function(add_stm32g4_driver LIB_NAME DRIVER_NAME)
   target_include_directories(
     stm32g4-${LIB_NAME} PUBLIC ${STM32G4_DRIVER_INCLUDE_DIR}
                                ${PROJECT_SOURCE_DIR}/src/hal)
+  set_target_properties(stm32g4-${LIB_NAME} PROPERTIES EXPORT_COMPILE_COMMANDS
+                                                       OFF)
 
   add_library(stm32g4::${LIB_NAME} ALIAS stm32g4-${LIB_NAME})
 endfunction()

@@ -11,4 +11,12 @@ jobs:
     - run: pip install cmakelang
     - run: clang-format --dry-run $(git ls-files | grep -E "\.(hpp|cpp)$")
     - run: cmake-format --check $(git ls-files | grep -E "(CMakeLists.txt|\.cmake)$")
-    - run: cmake -B build
+  iwyu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt install iwyu gcc-arm-none-eabi
+    - run: wget https://raw.githubusercontent.com/include-what-you-use/include-what-you-use/clang_15/iwyu_tool.py
+    - run: chmod +x iwyu_tool.py
+    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
+    - run: "! ./iwyu_tool.py -p build/compile_commands.json | grep should"
