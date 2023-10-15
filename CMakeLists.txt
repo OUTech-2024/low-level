@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 project(OUTech-2014-Low-Level LANGUAGES C CXX)
 
 include(FetchContent)
