@@ -19,4 +19,4 @@ jobs:
     - run: wget https://raw.githubusercontent.com/include-what-you-use/include-what-you-use/clang_15/iwyu_tool.py
     - run: chmod +x iwyu_tool.py
     - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: ./iwyu_tool.py -p build/compile_commands.json | grep should && exit 1
+    - run: ! ./iwyu_tool.py -p build/compile_commands.json | grep should
