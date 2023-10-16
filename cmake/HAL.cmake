@@ -27,14 +27,13 @@ function(
   LINKER_SCRIPT
   DRIVER_SOURCE_DIR
   DRIVER_INCLUDE_DIR
-  CMSIS_SYSTEM_FILE
-  CMSIS_INCLUDE_DIR)
+  CMSIS_TARGET)
   __add_stm32_hal(${LIB_PREFIX}-hal ${FAMILY} ${TARGET_COMPILE_DEF}
                   ${LIB_PREFIX} ${DRIVER_SOURCE_DIR} ${DRIVER_INCLUDE_DIR})
   add_library(${LIB_PREFIX}::hal ALIAS ${LIB_PREFIX}-hal)
 
   __add_cmsis_driver(${LIB_PREFIX}-cmsis ${FAMILY} ${TARGET_COMPILE_DEF}
-                     ${LIB_PREFIX} ${CMSIS_SYSTEM_FILE} ${CMSIS_INCLUDE_DIR})
+                     ${LIB_PREFIX} ${CMSIS_TARGET})
   add_library(${LIB_PREFIX}::cmsis ALIAS ${LIB_PREFIX}-cmsis)
 
   foreach(DRIVER_NAME IN LISTS DRIVER_NAMES)
@@ -80,7 +79,7 @@ function(
     target_sources(${LIB_NAME} PRIVATE ${EXTENSION_SOURCE_FILE})
   endif()
 
-  target_link_libraries(${LIB_NAME} PUBLIC CMSIS)
+  target_link_libraries(${LIB_NAME} PUBLIC cmsis-stm32g4)
   target_include_directories(${LIB_NAME} PUBLIC ${DRIVER_INCLUDE_DIR}
                                                 ${PROJECT_SOURCE_DIR}/src/hal)
   set_target_properties(${LIB_NAME} PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
@@ -99,7 +98,7 @@ function(
   DRIVER_INCLUDE_DIR)
   add_library(${LIB_NAME} ${DRIVER_SOURCE_DIR}/${FAMILY}_hal.c)
 
-  target_link_libraries(${LIB_NAME} PUBLIC CMSIS)
+  target_link_libraries(${LIB_NAME} PUBLIC cmsis-common)
   target_include_directories(${LIB_NAME} PUBLIC ${DRIVER_INCLUDE_DIR}
                                                 ${PROJECT_SOURCE_DIR}/src/hal)
   set_target_properties(${LIB_NAME} PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
@@ -107,18 +106,11 @@ function(
                                                 ${TARGET_COMPILE_DEF})
 endfunction()
 
-function(
-  __add_cmsis_driver
-  LIB_NAME
-  FAMILY
-  TARGET_COMPILE_DEF
-  LINKER_SCRIPT
-  SYSTEM_FILE
-  INCLUDE_DIR)
+function(__add_cmsis_driver LIB_NAME FAMILY TARGET_COMPILE_DEF LINKER_SCRIPT
+         CMSIS_TARGET)
   add_library(${LIB_NAME} ${SYSTEM_FILE})
 
-  target_link_libraries(${LIB_NAME} PUBLIC CMSIS)
-  target_include_directories(${LIB_NAME} PUBLIC ${INCLUDE_DIR})
+  target_link_libraries(${LIB_NAME} PUBLIC ${CMSIS_TARGET})
   set_target_properties(${LIB_NAME} PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
   target_compile_definitions(${LIB_NAME} PUBLIC ${TARGET_COMPILE_DEF})
 endfunction()
@@ -131,6 +123,5 @@ add_stm32_targets(
   ${STM32G431KB_LINKER_SCRIPT}
   ${STM32G4_DRIVER_SOURCE_DIR}
   ${STM32G4_DRIVER_INCLUDE_DIR}
-  ${CMSIS_STM32G4_SYSTEM_FILE}
-  ${CMSIS_STM32G4_INCLUDE_DIR})
+  cmsis-stm32g4)
 link_stm32g4_targets(stm32g431kb)
