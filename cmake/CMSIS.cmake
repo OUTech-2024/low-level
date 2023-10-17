@@ -11,7 +11,12 @@ set(CMSIS_STM32G4_SYSTEM_FILE
 add_library(cmsis-common INTERFACE)
 target_include_directories(cmsis-common INTERFACE ${CMSIS_INCLUDE_DIR})
 
-add_library(cmsis-stm32g4 INTERFACE)
-target_link_libraries(cmsis-stm32g4 INTERFACE cmsis-common)
-target_include_directories(cmsis-stm32g4 INTERFACE ${CMSIS_STM32G4_INCLUDE_DIR})
-target_sources(cmsis-stm32g4 INTERFACE ${CMSIS_STM32G4_SYSTEM_FILE})
+function(add_cmsis_target LIB_NAME INCLUDE_DIR SYSTEM_FILE)
+  add_library(${LIB_NAME} INTERFACE)
+  target_link_libraries(${LIB_NAME} INTERFACE cmsis-common)
+  target_include_directories(${LIB_NAME} INTERFACE ${INCLUDE_DIR})
+  target_sources(${LIB_NAME} INTERFACE ${SYSTEM_FILE})
+endfunction()
+
+add_cmsis_target(cmsis-stm32g4 ${CMSIS_STM32G4_INCLUDE_DIR}
+                 ${CMSIS_STM32G4_SYSTEM_FILE})
