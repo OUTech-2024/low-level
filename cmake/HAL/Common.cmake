@@ -1,5 +1,5 @@
 function(add_stm32_common LIB_NAME TARGET_DEF LINKER_SCRIPT CMSIS_TARGET)
-  add_library(${LIB_NAME} INTERFACE)
+  add_library(${LIB_NAME} ${PROJECT_SOURCE_DIR}/src/hal/dummy.c)
   target_link_libraries(${LIB_NAME} PRIVATE ${CMSIS_TARGET})
   target_compile_definitions(${LIB_NAME} PUBLIC ${TARGET_DEF})
   target_include_directories(
