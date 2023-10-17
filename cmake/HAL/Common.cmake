@@ -1,6 +1,5 @@
-function(add_stm32_common LIB_NAME SYSTEM_FILE TARGET_DEF LINKER_SCRIPT
-         CMSIS_TARGET)
-  add_library(${LIB_NAME} ${SYSTEM_FILE})
+function(add_stm32_common LIB_NAME TARGET_DEF LINKER_SCRIPT CMSIS_TARGET)
+  add_library(${LIB_NAME} INTERFACE)
   target_link_libraries(${LIB_NAME} PRIVATE ${CMSIS_TARGET})
   target_compile_definitions(${LIB_NAME} PUBLIC ${TARGET_DEF})
   target_include_directories(
