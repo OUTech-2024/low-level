@@ -1,13 +1,13 @@
 function(add_stm32_common LIB_NAME SYSTEM_FILE TARGET_DEF LINKER_SCRIPT
          CMSIS_TARGET)
   add_library(${LIB_NAME} ${SYSTEM_FILE})
-  target_link_libraries(${LIB_NAME} PUBLIC ${CMSIS_TARGET})
+  target_link_libraries(${LIB_NAME} PRIVATE ${CMSIS_TARGET})
   target_compile_definitions(${LIB_NAME} PUBLIC ${TARGET_DEF})
-  target_include_directories(${LIB_NAME} PUBLIC ${STM32G4_DRIVER_INCLUDE_DIR}
-                                                ${PROJECT_SOURCE_DIR}/src/hal)
+  target_include_directories(
+    ${LIB_NAME}
+    PUBLIC ${STM32G4_DRIVER_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/src/hal
+           $<TARGET_PROPERTY:${CMSIS_TARGET},INTERFACE_INCLUDE_DIRECTORIES>)
   set_target_properties(${LIB_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-  set_target_properties(${LIB_NAME} PROPERTIES INTERFACE_LINK_DEPENDS
-                                               ${LINKER_SCRIPT})
 endfunction()
 
 function(
