@@ -27,3 +27,9 @@ jobs:
     - run: sudo apt install gcc-arm-none-eabi
     - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
     - run: cmake --build build -t app
+  clang-tidy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt install clang-tidy
+    - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy -p /code/build
