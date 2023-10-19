@@ -45,8 +45,6 @@ RUN mv iwyu_tool.py /usr/bin/
 # Remove uncached build stuff
 RUN rm -rf /root/*
 
-RUN apt install not
-
 # Switch to non-root user
 RUN adduser docker
 USER docker
