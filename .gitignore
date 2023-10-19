@@ -1,5 +1,7 @@
 /*
 !.gitignore
+!.clang-format
+!.clang-tidy
 !CMakeLists.txt
 !Dockerfile
 !Toolchain.cmake
