@@ -13,6 +13,7 @@ RUN --mount=type=cache,dst=/var/cache/apt \
     apt install -y \
     clang-15 \
     clang-format \
+    clang-tidy \
     cmake \
     gcc-arm-none-eabi \
     git \
@@ -42,10 +43,15 @@ RUN --mount=type=cache,dst=/root/include-what-you-use/build \
 RUN ln -s /usr/local/bin/include-what-you-use /usr/bin/iwyu
 RUN mv iwyu_tool.py /usr/bin/
 
+# Install clang-tidy-cache
+WORKDIR /root
+RUN git clone --depth=1 https://github.com/matus-chochlik/ctcache
+WORKDIR /root/ctcache
+RUN cp clang-tidy-cache /usr/local/bin
+ENV CTCACHE_DIR=/code/.ctcache
+
 # Remove uncached build stuff
 RUN rm -rf /root/*
-
-RUN apt install not
 
 # Switch to non-root user
 RUN adduser docker
