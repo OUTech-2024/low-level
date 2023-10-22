@@ -1,0 +1,22 @@
+FetchContent_MakeAvailable(Catch2)
+FetchContent_MakeAvailable(FakeIt)
+
+include(Catch)
+
+target_compile_definitions(Catch2 PUBLIC CATCH_CONFIG_NO_POSIX_SIGNALS)
+
+function(add_unit_test TEST_NAME TEST_FILE)
+  add_executable(${TEST_NAME} main.cpp ${TEST_FILE})
+  target_link_libraries(
+    ${TEST_NAME} PRIVATE Catch2::Catch2WithMain FakeIt::FakeIt-catch
+                         stm32g431kb-common)
+  add_dependencies(check ${TEST_NAME})
+
+  if(CMAKE_CROSSCOMPILING)
+    catch_discover_tests(${TEST_NAME} PROPERTIES LABELS check)
+  endif()
+endfunction()
+
+add_custom_target(check COMMAND ctest -L check --output-on-failure)
+
+add_unit_test(my_test my_test.cpp)

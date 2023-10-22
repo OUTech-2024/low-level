@@ -12,7 +12,19 @@ FetchContent_Declare(
   GIT_TAG v1.5.1
   CONFIGURE_COMMAND "" BUILD_COMMAND "")
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2
+  GIT_TAG v3.4.0)
+
+FetchContent_Declare(
+  FakeIt
+  GIT_REPOSITORY https://github.com/eranpeer/FakeIt
+  GIT_TAG 2.4.0)
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
+     ${catch2_SOURCE_DIR}/extras)
 include(HAL)
 
 add_subdirectory(src/app EXCLUDE_FROM_ALL)
+add_subdirectory(test/unit EXCLUDE_FROM_ALL)
