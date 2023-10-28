@@ -27,6 +27,20 @@ jobs:
     - run: sudo apt install gcc-arm-none-eabi
     - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
     - run: cmake --build build -t app
+  build-test-chip:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt install gcc-arm-none-eabi
+    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
+    - run: cmake --build build -t check
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt install gcc-arm-none-eabi
+    - run: cmake -B build
+    - run: cmake --build build -t check
   clang-tidy:
     runs-on: ubuntu-latest
     steps:
