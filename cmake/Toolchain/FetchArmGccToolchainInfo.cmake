@@ -1,17 +1,24 @@
-function(fetch_arm_gcc_toolchain_info RETVAL_INCLUDE_DIRS)
+function(fetch_arm_gcc_toolchain_info RETVAL_ARM_GCC_PATH RETVAL_INCLUDE_DIRS)
   find_program(ARM_GCC_EXECUTABLE arm-none-eabi-gcc REQUIRED)
-  file(TOUCH ${CMAKE_BINARY_DIR}/empty_file)
+  set(${RETVAL_ARM_GCC_EXECUTABLE}
+      ${ARM_GCC_EXECUTABLE}
+      PARENT_SCOPE)
 
-  __fetch_arm_gcc_toolchain_include_dirs(${ARM_GCC_EXECUTABLE} INCLUDE_DIRS)
+  __fetch_arm_gcc_toolchain_include_dirs(${ARM_GCC_EXECUTABLE} -xc
+                                         GCC_INCLUDE_DIRS)
+  __fetch_arm_gcc_toolchain_include_dirs(${ARM_GCC_EXECUTABLE} -xc++
+                                         GCC_INCLUDE_DIRS)
   set(${RETVAL_INCLUDE_DIRS}
-      ${INCLUDE_DIRS}
+      ${GCC_INCLUDE_DIRS} ${GXX_INCLUDE_DIRS}
       PARENT_SCOPE)
 endfunction()
 
 function(__fetch_arm_gcc_toolchain_include_dirs ARM_GCC_EXECUTABLE
-         RETVAL_INCLUDE_DIRS)
+         LANGUAGE_FLAG RETVAL_INCLUDE_DIRS)
+  file(TOUCH ${CMAKE_BINARY_DIR}/empty_file)
+
   execute_process(
-    COMMAND ${ARM_GCC_EXECUTABLE} -E -Wp,-v -
+    COMMAND ${ARM_GCC_EXECUTABLE} -E -Wp,-v ${LANGUAGE_FLAG} -
     INPUT_FILE ${CMAKE_BINARY_DIR}/empty_file
     OUTPUT_QUIET
     ERROR_VARIABLE SEARCH_LOG)

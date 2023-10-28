@@ -6,8 +6,7 @@ function(add_stm32_common LIB_NAME TARGET_DEF LINKER_SCRIPT CMSIS_TARGET)
     ${LIB_NAME}
     PUBLIC ${STM32G4_DRIVER_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/src/hal
            $<TARGET_PROPERTY:${CMSIS_TARGET},INTERFACE_INCLUDE_DIRECTORIES>)
-  set_target_properties(${LIB_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT}
-                                               EXPORT_COMPILE_COMMANDS OFF)
+  set_target_properties(${LIB_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 endfunction()
 
 function(
