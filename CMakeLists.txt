@@ -26,5 +26,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
      ${catch2_SOURCE_DIR}/extras)
 include(HAL)
 
+enable_testing()
+
 add_subdirectory(src/app EXCLUDE_FROM_ALL)
 add_subdirectory(test/unit EXCLUDE_FROM_ALL)
