@@ -10,6 +10,7 @@ function(add_unit_test TEST_NAME TEST_FILE)
   target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain
                                              FakeIt::FakeIt-catch)
   add_dependencies(check ${TEST_NAME})
+  set_target_properties(${TEST_NAME} PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
   if(NOT CMAKE_CROSSCOMPILING)
     catch_discover_tests(${TEST_NAME} PROPERTIES LABELS check)
