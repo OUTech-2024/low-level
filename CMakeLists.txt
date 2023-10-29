@@ -9,17 +9,20 @@ FetchContent_Declare(
   STM32CubeG4
   GIT_REPOSITORY https://github.com/STMicroelectronics/STM32CubeG4.git
   GIT_TAG v1.5.1
+  GIT_SHALLOW ON
   CONFIGURE_COMMAND "" BUILD_COMMAND "")
 
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2
-  GIT_TAG v3.4.0)
+  GIT_TAG v3.4.0
+  GIT_SHALLOW ON)
 
 FetchContent_Declare(
   FakeIt
   GIT_REPOSITORY https://github.com/eranpeer/FakeIt
-  GIT_TAG 2.4.0)
+  GIT_TAG 2.4.0
+  GIT_SHALLOW ON)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
      ${catch2_SOURCE_DIR}/extras)
