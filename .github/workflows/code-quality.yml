@@ -13,6 +13,7 @@ jobs:
     - run: cmake-format --check $(git ls-files | grep -E "(CMakeLists.txt|\.cmake)$")
   
   check:
+    runs-on: ubuntu-latest
     steps:
     - run: cmake -B build
     - run: cmake --build build -t check
