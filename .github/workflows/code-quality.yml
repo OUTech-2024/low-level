@@ -11,40 +11,33 @@ jobs:
     - run: pip install cmakelang
     - run: clang-format --dry-run $(git ls-files | grep -E "\.(hpp|cpp)$")
     - run: cmake-format --check $(git ls-files | grep -E "(CMakeLists.txt|\.cmake)$")
-  iwyu:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install iwyu gcc-arm-none-eabi
-    - run: wget https://raw.githubusercontent.com/include-what-you-use/include-what-you-use/clang_15/iwyu_tool.py
-    - run: chmod +x iwyu_tool.py
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: "! ./iwyu_tool.py -p build/compile_commands.json | grep should"
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: cmake --build build -t app
-  build-test-chip:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: cmake --build build -t check
+  
   check:
-    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
     - run: cmake -B build
     - run: cmake --build build -t check
-  clang-tidy:
+  
+  configure-chip:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi clang-tidy
+    - run: sudo apt install iwyu gcc-arm-none-eabi clang-tidy
     - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
+  iwyu:
+    needs: configure-chip
+    steps:
+    - run: wget https://raw.githubusercontent.com/include-what-you-use/include-what-you-use/clang_15/iwyu_tool.py
+    - run: chmod +x iwyu_tool.py
+    - run: "! ./iwyu_tool.py -p build/compile_commands.json | grep should"
+  clang-tidy:
+    needs: configure-chip
+    steps:
     - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy -p build
+  build:
+    needs: configure-chip
+    steps:
+    - run: cmake --build build -t app
+  build-test-chip:
+    needs: configure-chip
+    steps:
+    - run: cmake --build build -t check
