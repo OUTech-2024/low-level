@@ -15,11 +15,20 @@ RUN --mount=type=cache,dst=/var/cache/apt \
     clang-format \
     clang-tidy \
     cmake \
-    gcc-arm-none-eabi \
     git \
     libclang-15-dev \
     lld \
-    pip
+    pip \
+    wget
+
+# Install ARM GCC 13.2
+WORKDIR /root/dl
+RUN --mount=type=cache,dst=/root/dl \
+    wget --timestamping https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+RUN --mount=type=cache,dst=/root/dl \
+    tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
+RUN mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
+ENV PATH="$PATH:/arm-gcc/bin"
 
 # Install pip stuff
 RUN --mount=type=cache,dst=/root/.cache/pip \
