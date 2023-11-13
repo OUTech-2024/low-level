@@ -8,7 +8,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: sudo apt install clang-15 clang-format clang-tidy-15 libclang-15-dev lld
-    
+    - run: sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 0
+    - run: sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 0
+
     - run: wget https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
     - run: sudo tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
     - run: sudo mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
