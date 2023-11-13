@@ -13,7 +13,7 @@ RUN --mount=type=cache,dst=/var/cache/apt \
     apt install -y \
     clang-15 \
     clang-format \
-    clang-tidy \
+    clang-tidy-15 \
     cmake \
     git \
     libclang-15-dev \
@@ -40,6 +40,9 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 0
 # Make clang-15 default
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 0
 RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 0
+
+# Make clang-tidy-15 default
+RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 0
 
 # Compile and install IWYU
 WORKDIR /root
