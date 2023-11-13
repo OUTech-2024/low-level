@@ -31,6 +31,6 @@ jobs:
     - run: cmake --build build-host -t check
     
     - run: cmake -B build-chip -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy-15 -p build
-    - run: "! ./iwyu_tool.py -p build/compile_commands.json -- -Xiwyu --error --target=arm-none-eabi | grep should"
+    - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy-15 -p build-chip
+    - run: "! ./iwyu_tool.py -p build-chip/compile_commands.json -- -Xiwyu --error --target=arm-none-eabi | grep should"
     - run: cmake --build build-chip -t app
