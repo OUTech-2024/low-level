@@ -12,21 +12,16 @@ jobs:
     - run: sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 0
     - run: sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 0
 
-    - run: cd __tmp
-    - run: wget https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
-    - run: sudo tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
-    - run: sudo mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
-    - run: echo /arm-gcc/bin >> $GITHUB_PATH
-    - run: cd ..
+    - run: cd __tmp && wget https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+    - run: cd __tmp && sudo tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
+    - run: cd __tmp && sudo mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
+    - run: cd __tmp && echo /arm-gcc/bin >> $GITHUB_PATH
 
-    - run: cd __tmp
-    - run: git clone --depth=1 -b clang_15 https://github.com/include-what-you-use/include-what-you-use
-    - run: cd include-what-you-use
-    - run: cmake -B build -DCMAKE_PREFIX_PATH=/usr/lib/llvm-15
-    - run: cmake --build build -t install -j4
-    - run: sudo ln -s /usr/local/bin/include-what-you-use /usr/bin/iwyu
-    - run: sudo mv iwyu_tool.py /usr/bin/
-    - run: cd ../..
+    - run: cd __tmp && git clone --depth=1 -b clang_15 https://github.com/include-what-you-use/include-what-you-use
+    - run: cd __tmp/include-what-you-use && cmake -B build -DCMAKE_PREFIX_PATH=/usr/lib/llvm-15
+    - run: cd __tmp/include-what-you-use && cmake --build build -t install -j4
+    - run: cd __tmp/include-what-you-use && sudo ln -s /usr/local/bin/include-what-you-use /usr/bin/iwyu
+    - run: cd __tmp/include-what-you-use && sudo mv iwyu_tool.py /usr/bin/
 
     - run: clang-format --dry-run $(git ls-files | grep -E "\.(hpp|cpp)$")
     - run: cmake-format --check $(git ls-files | grep -E "(CMakeLists.txt|\.cmake)$")
