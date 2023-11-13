@@ -13,13 +13,22 @@ RUN --mount=type=cache,dst=/var/cache/apt \
     apt install -y \
     clang-15 \
     clang-format \
-    clang-tidy \
+    clang-tidy-15 \
     cmake \
-    gcc-arm-none-eabi \
     git \
     libclang-15-dev \
     lld \
-    pip
+    pip \
+    wget
+
+# Install ARM GCC 13.2
+WORKDIR /root/dl
+RUN --mount=type=cache,dst=/root/dl \
+    wget --timestamping https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+RUN --mount=type=cache,dst=/root/dl \
+    tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
+RUN mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
+ENV PATH="$PATH:/arm-gcc/bin"
 
 # Install pip stuff
 RUN --mount=type=cache,dst=/root/.cache/pip \
@@ -31,6 +40,9 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 0
 # Make clang-15 default
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 0
 RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 0
+
+# Make clang-tidy-15 default
+RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 0
 
 # Compile and install IWYU
 WORKDIR /root
