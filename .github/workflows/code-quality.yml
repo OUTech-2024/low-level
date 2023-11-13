@@ -7,44 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt install clang-format
-    - run: pip install cmakelang
+    - run: sudo apt install clang-15 clang-format clang-tidy-15 libclang-15-dev lld
+    
+    - run: wget https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+    - run: tar xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /
+    - run: sudo mv /arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi /arm-gcc
+    - run: echo /arm-gcc/bin >> $GITHUB_PATH
+
+    - run: git clone --depth=1 -b clang_15 https://github.com/include-what-you-use/include-what-you-use
+    - run: cmake -B build -DCMAKE_PREFIX_PATH=/usr/lib/llvm-15
+    - run: cmake --build build -t install -j4
+    - run: sudo ln -s /usr/local/bin/include-what-you-use /usr/bin/iwyu
+    - run: sudo mv iwyu_tool.py /usr/bin/
+    
     - run: clang-format --dry-run $(git ls-files | grep -E "\.(hpp|cpp)$")
     - run: cmake-format --check $(git ls-files | grep -E "(CMakeLists.txt|\.cmake)$")
-  iwyu:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install iwyu gcc-arm-none-eabi
-    - run: wget https://raw.githubusercontent.com/include-what-you-use/include-what-you-use/clang_15/iwyu_tool.py
-    - run: chmod +x iwyu_tool.py
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: "! ./iwyu_tool.py -p build/compile_commands.json | grep should"
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: cmake --build build -t app
-  build-test-chip:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: cmake --build build -t check
-  check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi
-    - run: cmake -B build
-    - run: cmake --build build -t check
-  clang-tidy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt install gcc-arm-none-eabi clang-tidy
-    - run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
-    - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy -p build
+    
+    - run: cmake -B build-host
+    - run: cmake --build build-host -t check
+    
+    - run: cmake -B build-chip -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain.cmake
+    - run: git ls-files | grep -E "\.cpp$" | xargs clang-tidy-15 -p build
+    - run: "! ./iwyu_tool.py -p build/compile_commands.json -- -Xiwyu --error --target=arm-none-eabi | grep should"
+    - run: cmake --build build-chip -t app
