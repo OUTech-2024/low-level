@@ -9,6 +9,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: mkdir __tmp
     - run: sudo apt install clang-15 clang-format clang-tidy-15 libclang-15-dev lld
+    - run: pip install cmakelang
     - run: sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 0
     - run: sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 0
 
