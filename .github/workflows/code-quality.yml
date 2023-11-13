@@ -19,7 +19,7 @@ jobs:
 
     - run: cd __tmp && git clone --depth=1 -b clang_15 https://github.com/include-what-you-use/include-what-you-use
     - run: cd __tmp/include-what-you-use && cmake -B build -DCMAKE_PREFIX_PATH=/usr/lib/llvm-15
-    - run: cd __tmp/include-what-you-use && cmake --build build -t install -j4
+    - run: cd __tmp/include-what-you-use && sudo cmake --build build -t install -j4
     - run: cd __tmp/include-what-you-use && sudo ln -s /usr/local/bin/include-what-you-use /usr/bin/iwyu
     - run: cd __tmp/include-what-you-use && sudo mv iwyu_tool.py /usr/bin/
 
